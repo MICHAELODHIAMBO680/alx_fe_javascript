@@ -29,17 +29,61 @@ function showRandomQuote() {
 function addQuote() {
   const newQuoteText = document.getElementById("newQuoteText").value;
   const newQuoteCategory = document.getElementById("newQuoteCategory").value;
-  
+
   if (newQuoteText && newQuoteCategory) {
-    quotes.push({ text: newQuoteText, category: newQuoteCategory });
+    const newQuote = { text: newQuoteText, category: newQuoteCategory };
+    quotes.push(newQuote);
     document.getElementById("newQuoteText").value = '';
     document.getElementById("newQuoteCategory").value = '';
     saveQuotes();
     populateCategories(); // Update categories if new category added
     alert("New quote added!");
+
+    // Post the new quote to the server
+    postQuoteToServer(newQuote);
   } else {
     alert("Please fill out both fields.");
   }
+}
+
+// Function to fetch quotes from the server
+function fetchQuotesFromServer() {
+  fetch("https://jsonplaceholder.typicode.com/posts")
+    .then(response => response.json())
+    .then(data => {
+      const serverQuotes = data.map(item => ({
+        text: item.body,
+        category: "Server"
+      }));
+      quotes.push(...serverQuotes);
+      saveQuotes();
+      populateCategories(); // Update categories if new categories are added
+      alert("Quotes fetched from server!");
+    })
+    .catch(error => console.error("Error fetching data from server:", error));
+}
+
+// Call this function periodically (e.g., every 5 minutes)
+setInterval(fetchQuotesFromServer, 5 * 60 * 1000);
+
+// Call the function once to fetch initial data
+fetchQuotesFromServer();
+
+// Function to post a new quote to the server
+function postQuoteToServer(quote) {
+  fetch("https://jsonplaceholder.typicode.com/posts", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(quote)
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log("Quote posted to server:", data);
+      alert("Quote posted to server successfully!");
+    })
+    .catch(error => console.error("Error posting data to server:", error));
 }
 
 function populateCategories() {
@@ -79,6 +123,7 @@ function loadSelectedCategory() {
   }
 }
 
+// Save selected category when it changes
 document.getElementById("categoryFilter").addEventListener("change", saveSelectedCategory);
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -108,20 +153,6 @@ function importFromJsonFile(event) {
     alert('Quotes imported successfully!');
   };
   fileReader.readAsText(event.target.files[0]);
-}
-
-function fetchQuotesFromServer() {
-  fetch("https://jsonplaceholder.typicode.com/posts")
-    .then(response => response.json())
-    .then(data => {
-      const serverQuotes = data.map(item => ({
-        text: item.body,
-        category: "Server"
-      }));
-      quotes.push(...serverQuotes);
-      saveQuotes();
-      alert("Quotes fetched from server!");
-    });
 }
 
 function syncQuotesWithServer() {
@@ -176,4 +207,6 @@ function manualConflictResolution(localQuotes, serverQuotes) {
     .map(text => mergedQuotes.find(quote => quote.text === text));
 }
 
-setInterval(syncQuotesWithConflictResolution, 10 * 60 * 1000); // Sync every 10 minutes
+// Sync every 10 minutes
+setInterval(syncQuotesWithConflictResolution, 10 * 60 * 1000);
+
