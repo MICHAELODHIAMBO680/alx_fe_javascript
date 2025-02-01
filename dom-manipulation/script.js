@@ -46,6 +46,23 @@ function addQuote() {
   }
 }
 
+// Function to post a new quote to the server
+function postQuoteToServer(quote) {
+  fetch("https://jsonplaceholder.typicode.com/posts", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(quote)
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log("Quote posted to server:", data);
+      alert("Quote posted to server successfully!");
+    })
+    .catch(error => console.error("Error posting data to server:", error));
+}
+
 // Function to fetch quotes from the server
 function fetchQuotesFromServer() {
   fetch("https://jsonplaceholder.typicode.com/posts")
@@ -68,23 +85,6 @@ setInterval(fetchQuotesFromServer, 5 * 60 * 1000);
 
 // Call the function once to fetch initial data
 fetchQuotesFromServer();
-
-// Function to post a new quote to the server
-function postQuoteToServer(quote) {
-  fetch("https://jsonplaceholder.typicode.com/posts", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(quote)
-  })
-    .then(response => response.json())
-    .then(data => {
-      console.log("Quote posted to server:", data);
-      alert("Quote posted to server successfully!");
-    })
-    .catch(error => console.error("Error posting data to server:", error));
-}
 
 function populateCategories() {
   const categoryFilter = document.getElementById("categoryFilter");
@@ -209,4 +209,5 @@ function manualConflictResolution(localQuotes, serverQuotes) {
 
 // Sync every 10 minutes
 setInterval(syncQuotesWithConflictResolution, 10 * 60 * 1000);
+
 
