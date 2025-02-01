@@ -1,41 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dynamic Quote Generator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Quote Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        #quoteDisplay {
+            font-size: 1.5em;
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            display: inline-block;
+            width: 60%;
+        }
+        input, button, select {
+            margin: 5px;
+            padding: 10px;
+            font-size: 1em;
+        }
+    </style>
 </head>
 <body>
-  <h1>Dynamic Quote Generator</h1>
-  
-  <!-- Quote Display Area -->
-  <div id="quoteDisplay"></div>
-  <button id="newQuote">Show New Quote</button>
+    <h1>Dynamic Quote Generator</h1>
 
-  <!-- Add New Quote Form -->
-  <div>
-    <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
-    <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
-    <button onclick="addQuote()">Add Quote</button>
-  </div>
+    <!-- Quote Display -->
+    <div id="quoteDisplay">Click "Show New Quote" to begin</div>
+    <button id="newQuote">Show New Quote</button>
 
-  <!-- Filter Quotes by Category -->
-  <select id="categoryFilter" onchange="filterQuotes()">
-    <option value="all">All Categories</option>
-    <!-- Dynamically populated categories -->
-  </select>
+    <!-- Add Quote Form -->
+    <div>
+        <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
+        <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
+        <button onclick="addQuote()">Add Quote</button>
+    </div>
 
-  <!-- Export Quotes to JSON -->
-  <button id="exportQuotes">Export Quotes</button>
+    <!-- Category Filter -->
+    <select id="categoryFilter" onchange="filterQuotes()">
+        <option value="all">All Categories</option>
+    </select>
 
-  <!-- Import Quotes from JSON -->
-  <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
+    <!-- Import/Export JSON -->
+    <button onclick="exportQuotes()">Export Quotes</button>
+    <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
 
-  <!-- Resolve Conflicts Button (optional) -->
-  <button id="resolveConflicts">Resolve Conflicts</button>
-  
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
+
+
 
 
